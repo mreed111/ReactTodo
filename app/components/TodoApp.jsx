@@ -8,7 +8,8 @@ var TodoAPI = require('TodoAPI');
 import TodoList from 'TodoList'
 //var AddTodo = require('AddTodo');
 import AddTodo from 'AddTodo'
-var TodoSearch = require('TodoSearch');
+//var TodoSearch = require('TodoSearch');
+import TodoSearch from 'TodoSearch'
 
 var TodoApp = React.createClass({
   getInitialState: function () {
