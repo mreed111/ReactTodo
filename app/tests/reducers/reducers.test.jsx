@@ -80,5 +80,37 @@ describe('Reducers', () => {
       expect(res[0].completed).toEqual(true);
       expect(res[0].completedAt).toNotEqual(undefined, 'completedAt field should be set when completed is toggled to true.');
     });
+
+    it('should add existing todos', () => {
+      var todos = [{
+            id: 1,
+            text: 'wash the dog',
+            completed: false,
+            completedAt: undefined,
+            createdAt: 500
+          }, {
+            id: 2,
+            text: 'Feed the dog',
+            completed: false,
+            completedAt: undefined,
+            createdAt: 500
+          }, {
+            id: 3,
+            text: 'walk the cat',
+            completed: false,
+            completedAt: undefined,
+            createdAt: 500
+          }];
+      var action = {
+        type: 'ADD_TODOS',
+        todos: todos
+      };
+      var res = reducers.todosReducer(df([]), df(action));
+
+      expect(res.length).toEqual(todos.length);
+      expect(res[0]).toEqual(todos[0]);
+    });
   });
+
+
 });

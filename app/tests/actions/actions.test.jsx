@@ -24,6 +24,38 @@ describe('Actions', () => {
     expect(res).toEqual(action);
   });
 
+  it('should generate add todos action object', () => {
+    var todos = {
+      type: 'ADD_TODOS',
+      todos: [{
+          id: 1,
+          text: 'wash the dog',
+          completed: false,
+          completedAt: undefined,
+          createdAt: 500
+        }, {
+          id: 2,
+          text: 'Feed the dog',
+          completed: false,
+          completedAt: undefined,
+          createdAt: 500
+        }, {
+          id: 3,
+          text: 'walk the cat',
+          completed: false,
+          completedAt: undefined,
+          createdAt: 500
+        }]
+    };
+    var action = {
+      type: 'ADD_TODOS',
+      todos
+    };
+    var res = actions.addTodos(todos);
+
+    expect(res).toEqual(action);
+  });
+
   it('should generate a toggle show completed action', () => {
     var action = {
       type: 'TOGGLE_SHOW_COMPLETED'
