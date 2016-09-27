@@ -50,39 +50,28 @@ describe('Reducers', () => {
       expect(res[0]).toEqual(action.todo);
     });
 
-    it('should toggle a todo and set the completedAt value.', () => {
-      var testTodos = [{
+    it('should update a todo.', () => {
+      var todos = [{
           id: '999',
           text: 'Something to do.',
-          completed: false,
-          createdAt: 1000,
-          completedAt: undefined
-        },{
-          id: '111',
-          text: 'Something else to do.',
           completed: true,
           createdAt: 1000,
-          completedAt: 2000
+          completedAt: 99000
         }];
+      var updates = {
+        completed: false,
+        completedAt: null
+      };
       var action = {
-        type: 'TOGGLE_TODO',
-        id: '111'
+        type: 'UPDATE_TODO',
+        id: todos[0].id,
+        updates
       };
-      var res = reducers.todosReducer(df(testTodos),df(action));
+      var res = reducers.todosReducer(df(todos),df(action));
 
-      expect(res.length).toEqual(2);
-      expect(res[1].completed).toEqual(false);
-      expect(res[1].completedAt).toEqual(undefined, 'completedAt field should be undefined when completed is toggled to false.');
-
-      action = {
-        type: 'TOGGLE_TODO',
-        id: '999'
-      };
-      res = reducers.todosReducer(df(testTodos),df(action));
-
-      expect(res.length).toEqual(2);
-      expect(res[0].completed).toEqual(true);
-      expect(res[0].completedAt).toNotEqual(undefined, 'completedAt field should be set when completed is toggled to true.');
+      expect(res[0].completed).toEqual(updates.completed);
+      expect(res[0].completedAt).toEqual(updates.completedAt);
+      expect(res[0].text).toEqual(todos[0].text);
     });
 
     it('should add existing todos', () => {
