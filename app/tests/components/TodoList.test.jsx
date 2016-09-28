@@ -44,7 +44,7 @@ describe('TodoList', () => {
           <ConnectedTodoList/>
         </Provider>
       );
-      
+
       var todoList = TestUtils.scryRenderedComponentsWithType(provider, ConnectedTodoList)[0];
       var todosComponents = TestUtils.scryRenderedComponentsWithType(todoList, ConnectedTodo);
 
@@ -53,12 +53,31 @@ describe('TodoList', () => {
 
   it('should return "Nothing To Do" if todoList is empty', () => {
     var todos = [];
+    console.log('todoList --- ' + todos.length);
 
-    var todoList = TestUtils.renderIntoDocument(<TodoList todos={todos} />);
-    var todosComponents = TestUtils.scryRenderedComponentsWithType(todoList, Todo);
-    var $el = $(ReactDOM.findDOMNode(todoList));
+    var store = configure({
+      todos
+    });
+    var provider = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <ConnectedTodoList/>
+      </Provider>
+    );
 
-    expect($el.find('.container__message').length).toBe(1);
+    var todoList = TestUtils.scryRenderedComponentsWithType(provider, ConnectedTodoList)[0];
+    var todosComponents = TestUtils.scryRenderedComponentsWithType(todoList, ConnectedTodo);
+
+    expect(todosComponents.length).toEqual(0);
+    // var noTodosComponents = TestUtils.scryRenderedComponentsWithType(provider, 'container__message');
+    // expect(noTodosComponents.length).toEqual(1);
+    // var $el = $(provider.findDOMNode(todoList));
+    // expect($el.find('.container__message').length).toBe(1);
+
+    // var todoList = TestUtils.renderIntoDocument(<TodoList todos={todos} />);
+    // var todosComponents = TestUtils.scryRenderedComponentsWithType(todoList, Todo);
+    // var $el = $(ReactDOM.findDOMNode(todoList));
+    //
+    // expect($el.find('.container__message').length).toBe(1);
   });
 
 });
