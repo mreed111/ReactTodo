@@ -6,9 +6,9 @@ var $ = require('jQuery');
 var TestUtils = require('react-addons-test-utils');
 
 var configureStore = require('configureStore');
-var TodoApp = require('TodoApp');
-//var TodoList = require('TodoList');
-import TodoList  from 'TodoList'
+// import the unconnected version of TodoApp for testing
+import {TodoApp} from 'TodoApp';
+import TodoList  from 'TodoList';
 
 describe('TodoApp', () => {
   it('should exist', () => {
