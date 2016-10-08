@@ -117,7 +117,7 @@ describe('Reducers', () => {
       expect(res.uid).toEqual(action.uid);
     });
 
-    it('should remove uid value on logout', () => {
+    it('should remove auth uid value on logout', () => {
       var action = {
         type: 'LOGOUT'
       };
