@@ -169,6 +169,27 @@ describe('Actions', () => {
         done();
       }, done());
     });
-
   });
+
+  describe('tests for Authorization actions', () => {
+    it('should generate LOGIN action object', () => {
+      const action = {
+        type: 'LOGIN',
+        uid: '000999'
+      };
+      var res = actions.login(action.uid);
+
+      expect(res).toEqual(action);
+    });
+
+    it('should generate LOGOUT action object', () => {
+      const action = {
+        type: 'LOGOUT'
+      };
+      var res = actions.logout(action.uid);
+
+      expect(res).toEqual(action);
+    });
+  });
+
 });
