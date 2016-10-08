@@ -35,23 +35,6 @@ describe('Actions', () => {
     expect(res).toEqual(action);
   });
 
-  it('should create todo and dispatch ADD_TODO', (done) => {
-    const store = createMockStore({});
-    const todoText = 'My todo item';
-
-    store.dispatch(actions.startAddTodo(todoText)).then(() => {
-      // success case
-      const actions = store.getActions();
-      expect(actions[0]).toInclude({
-        type: 'ADD_TODO'
-      });
-      expect(actions[0].todo).toInclude({
-        text: todoText
-      });
-      done();
-    }).catch(done);
-  });
-
   it('should generate add todos action object', () => {
     var todos = {
       type: 'ADD_TODOS',
@@ -108,30 +91,52 @@ describe('Actions', () => {
 
   describe('Tests with firebase todos', () => {
     var testTodoRef;
+    var uid;
+    var todosRef;
 
     beforeEach((done) => {
-      var todosRef = firebaseRef.child('todos');
-      //empty the todos array.
-      todosRef.remove().then(() => {
-        testTodoRef = firebaseRef.child('todos').push();
+      firebase.auth().signInAnonymously().then((user) => {
+        // success, logged in anonymously
+        uid = user.uid;
+        todosRef = firebaseRef.child(`users/${uid}/todos`);
+
+        return todosRef.remove();
+      }).then(() => {
+        // make a new todo
+        testTodoRef = todosRef.push();
 
         return testTodoRef.set({
           text: 'Something to do.',
           completed: false,
           completedAt: 99999
-        })
+        });
       })
       .then(() => done())
       .catch(done);
-
+      //
+      // var todosRef = firebaseRef.child('todos');
+      // //empty the todos array.
+      // todosRef.remove().then(() => {
+      //   testTodoRef = firebaseRef.child('todos').push();
+      //
+      //   return testTodoRef.set({
+      //     text: 'Something to do.',
+      //     completed: false,
+      //     completedAt: 99999
+      //   })
+      // })
+      // .then(() => done())
+      // .catch(done);
+      //
     });
 
     afterEach((done) => {
-      testTodoRef.remove().then(() => done());
+      // remove all todos
+      todosRef.remove().then(() => done());
     });
 
     it('should toggle todo and dispatch UPDATE_TODO Actions', (done) => {
-      const store = createMockStore({});
+      const store = createMockStore({auth: {uid}});
       const action = actions.startToggleTodo(testTodoRef.key, true);
 
       store.dispatch(action).then(() => {
@@ -152,7 +157,7 @@ describe('Actions', () => {
     });
 
     it('should populate todos and dispatch ADD_TODOS', (done) => {
-      const store = createMockStore({});
+      const store = createMockStore({auth: {uid}});
       const action = actions.startAddTodos();
 
       store.dispatch(action).then(() => {
@@ -169,6 +174,24 @@ describe('Actions', () => {
         done();
       }, done());
     });
+
+    it('should create todo and dispatch ADD_TODO', (done) => {
+      const store = createMockStore({auth: {uid}});
+      const todoText = 'My todo item';
+
+      store.dispatch(actions.startAddTodo(todoText)).then(() => {
+        // success case
+        const actions = store.getActions();
+        expect(actions[0]).toInclude({
+          type: 'ADD_TODO'
+        });
+        expect(actions[0].todo).toInclude({
+          text: todoText
+        });
+        done();
+      }).catch(done);
+    });
+
   });
 
   describe('tests for Authorization actions', () => {
