@@ -103,6 +103,28 @@ describe('Reducers', () => {
       expect(res.length).toEqual(todos.length);
       expect(res[0]).toEqual(todos[0]);
     });
+
+    it('should return an empty todos array on LOGOUT', () => {
+      var todos = [{
+            id: 1,
+            text: 'wash the dog',
+            completed: false,
+            completedAt: undefined,
+            createdAt: 500
+          }, {
+            id: 2,
+            text: 'Feed the dog',
+            completed: false,
+            completedAt: undefined,
+            createdAt: 500
+          }];
+      var action = {
+        type: 'LOGOUT'
+      };
+      var res = reducers.todosReducer(df(todos), df(action));
+
+      expect(res.length).toEqual(0);
+    });
   });
 
   describe('authReducer', () => {
